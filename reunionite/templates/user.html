@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}{{ user }}{% endblock %}
+
+{% block content %}
+	Polls : {{ polls|length}}
+	{% if this_user == user %}
+		<form method="post" action="{% url 'user' %}">
+			{% csrf_token %}
+			{{ user_edit_form }}
+			<input type="submit" />
+		</form>
+	{% endif %}
+	
+{% endblock %}

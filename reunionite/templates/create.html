@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Création d'un sondage{% endblock %}
+
+{% block content %}
+<script language="JScript" src="{% static 'js/create.js' %}"></script>
+<form method="post" action="{% url 'create' %}">
+<div id="poll">
+	{% csrf_token %}
+	<label for="poll_name">Titre</label>
+	<input type="text" name="poll_name" id="poll_name" />
+	
+</div>
+<a onclick="addQuestion">Ajouter une question</a>
+<button type="button" class="btn btn-success" >Envoyer</button>
+</form>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}{{poll_name}}{% endblock %}
+
+{% block content %}
+<div class="poll_results">
+	{% for question in results.questions %}
+	<div class="question">
+		<p>{{forloop.counter}} : {{question.question}}</p>
+		<ul>
+		{% for result in question.results %}
+			<li>
+				{{result.choice}} : {{result.result}}
+				{% if result.choice.is_text %}
+					(text)
+				{% endif %}
+			</li>
+		{% endfor %}
+		</ul>
+	</div>
+	{% empty %}
+		<p>i know what you did there...</p>
+	{% endfor %}
+</div>
+{% endblock %}

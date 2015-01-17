@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Sondages{% endblock %}
+
+{% block content %}
+	<ul>
+	{% for poll in polls %}
+		<li><a href="{% url 'poll' poll.id %}">{{poll}} - {{poll.description}}</a></li>
+	{% empty %}
+		<li>aucun sondage trouvé</li>
+	{% endfor %}
+	</ul>
+{% endblock %}

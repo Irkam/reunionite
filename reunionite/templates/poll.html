@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}{{poll_name}}{% endblock %}
+
+{% block content %}
+{% if poll.owner == user %}<a href="{% url 'results' poll.poll.id %}">Results</a>{% endif %}
+<form method="post" action="{% url 'poll' poll.poll.id %}">
+{% csrf_token %}
+<div class="poll">
+	{% for question in poll.questions %}
+	<div class="question">
+		<p>{{forloop.counter}} : {{question.question}}</p>
+		<ul>
+		{% for choice in question.choices %}
+			<li>
+				<input type={% if question.choices|length == 1 %}"hidden"{% elif question.question.max_answers == 1 %}"radio"{%else%}"checkbox"{%endif%} name="q{{question.question.id}}" value="{{choice.id}}"/>
+				{{choice}}
+				{% if choice.is_text %}
+					<input type="text" name="q{{question.question.id}}_c{{choice.id}}" />
+				{% endif %}
+			</li>
+		{% endfor %}
+		</ul>
+	</div>
+	{% empty %}
+		<p>i know what you did there...</p>
+	{% endfor %}
+	<input type="submit" />
+</div>
+</form>
+{% endblock %}
