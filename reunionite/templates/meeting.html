@@ -9,7 +9,7 @@
 <div class="meeting">
 	<ul>
 	{% for date in meeting_form.dates %}
-		<li>{{date}}</li>
+		<li>{{date}} {{date.label_tag}}</li>
 	{% empty %}
 		<li>i know what you did there...</li>
 	{% endfor %}

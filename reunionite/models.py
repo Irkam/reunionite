@@ -62,7 +62,7 @@ class Availability(Model):
 
 
 def get_dates(self):
-    return Date.objects.all().filter(meeting=self)
+    return Date.objects.all().filter(meeting=self).group_by('start.year', 'start.month', 'start.day', 'start.hour')
 
 def delete_availabilities(self, user):
     for d in Date.objects.all().filter(meeting=self):

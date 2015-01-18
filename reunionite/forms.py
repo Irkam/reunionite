@@ -22,11 +22,16 @@ class EditUserForm(Form):
 def MeetingForm(meeting):
     """
         creates a form from a meeting
-        useful for validation.
-        
-        TODO: utiliser CheckboxMultipleSelect et résoudre bug lié à cette utilisation
+        useful for validation, not much for displaying
         
         :param meeting: a meeting
         :type meeting: reunionite.models.Meeting instance
     """
-    return type('PollForm', (Form, ), {'dates': forms.ModelChoiceField(queryset=Date.objects.all().filter(meeting=meeting), empty_label=None, widget=forms.RadioSelect, required=True)})
+    qs = Date.objects.all().filter(meeting=meeting)
+    w =  forms.RadioSelect if meeting.max_answers == 1 else forms.CheckboxSelectMultiple
+    
+    if meeting.max_answers == 1:
+        dates_form = forms.ModelChoiceField(queryset=qs, widget=w, empty_label=None, required=True)
+    else:
+        dates_form = forms.ModelMultipleChoiceField(queryset=qs, widget=w, required=True)
+    return type('PollForm', (Form, ), {'dates': dates_form})

@@ -12,6 +12,8 @@ from reunionite.forms import MeetingForm
 from django.core.exceptions import SuspiciousOperation, PermissionDenied, ValidationError
 import re
 
+import pdb
+
 class MeetingView(View):
     template_name = "meeting.html"
     regex = re.compile("^q(\d+)$")
@@ -21,7 +23,8 @@ class MeetingView(View):
             meeting = Meeting.objects.get(pk=self.kwargs['meeting_id'])
             
             if meeting.user_can_vote(request.user):
-                meeting_form = MeetingForm(meeting)
+                meeting_form = MeetingForm(meeting)()
+                pdb.set_trace()
                 return render(request, self.template_name, {'meeting': meeting.get_meeting(),
                                                             'meeting_form': meeting_form,})
             else:
@@ -46,13 +49,22 @@ class MeetingView(View):
             meeting.delete_availabilities(request.user)
             
             if meeting.user_can_vote(request.user):
-                date = meeting_form.cleaned_data['dates']
-                #TODO: handle multiple dates
-                availability = Availability()
-                availability.meeting = meeting
-                availability.date = date
-                availability.user = request.user
-                availability.save()
+                if meeting.max_answers == 1:
+                    date = meeting_form.cleaned_data['dates']
+                    
+                    availability = Availability()
+                    availability.meeting = meeting
+                    availability.date = date
+                    availability.user = request.user
+                    availability.save()
+                
+                else:
+                    for date in meeting_form.cleaned_data['dates'] :                    
+                        availability = Availability()
+                        availability.meeting = meeting
+                        availability.date = date
+                        availability.user = request.user
+                        availability.save()
                         
                 return render(request, self.template_name, {'meeting': meeting.get_meeting(),
                                                             'meeting_form': meeting_form,
