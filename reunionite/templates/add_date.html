@@ -3,7 +3,7 @@
 {% block title %}{{date}}{% endblock %}
 
 {% block content %}
-
+{{ date_form.media }}
 <form method="post" action="{% url 'add' meeting_id %}">
 {% csrf_token %}
 <div class="meeting">

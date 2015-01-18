@@ -7,23 +7,28 @@ Created on 26 déc. 2014
 from django import forms
 from django.forms import Form
 from reunionite.models import *
+from bootstrap3_datetime.widgets import DateTimePicker
 
 class CreateMeetingForm(Form):
     name = forms.CharField(max_length=64, required=True)
     description = forms.CharField(max_length=64, required=True)
     location = forms.CharField(max_length=64, required=True)
-    #date_closed = forms.DateTimeField()
+    date_closed = forms.DateTimeField(widget=DateTimePicker(options={"format": "YYYY-MM-DD HH:mm",
+                                       "pickSeconds": False}))
     max_answers = forms.IntegerField()
 
 class EditMeetingForm(Form):
     name = forms.CharField(max_length=64, required=True)
     description = forms.CharField(max_length=64, required=True)
     location = forms.CharField(max_length=64, required=True)
-    #date_closed = forms.DateTimeField()
+    date_closed = forms.DateTimeField(widget=DateTimePicker(options={"format": "YYYY-MM-DD HH:mm",
+                                       "pickSeconds": False}))
 
 class DateForm(Form):
-    start = forms.DateTimeField()
-    end = forms.DateTimeField()
+    start = forms.DateTimeField(widget=DateTimePicker(options={"format": "YYYY-MM-DD HH:mm",
+                                       "pickSeconds": False}))
+    end = forms.DateTimeField(widget=DateTimePicker(options={"format": "YYYY-MM-DD HH:mm",
+                                       "pickSeconds": False}))
     
 class RegisterUserForm(Form):
     username = forms.CharField(max_length=32, required=True)

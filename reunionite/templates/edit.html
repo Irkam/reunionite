@@ -3,7 +3,7 @@
 {% block title %}{{meeting.meeting.name}}{% endblock %}
 
 {% block content %}
-
+{{ meeting_form.media }}
 <form method="post" action="{% url 'edit' meeting.meeting.id %}">
 {% csrf_token %}
 <div class="meeting">
