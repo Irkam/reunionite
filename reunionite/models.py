@@ -20,7 +20,7 @@ class Meeting(Model):
     def __str__(self):
         return self.name
     
-    def get_poll(self):
+    def get_meeting(self):
         return {'poll': self, 'questions': [{'question': question, 'choices': question.get_choices()} for question in self.get_questions()]}
     
     def get_results(self):
@@ -67,7 +67,7 @@ def delete_availabilities(self, user):
         for answer in Availability.objects.all().filter(date=d):
             answer.delete()
 
-Meeting.get_questions = get_dates
+Meeting.get_dates = get_dates
 Meeting.delete_availabilities = delete_availabilities
 
 

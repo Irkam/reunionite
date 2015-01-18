@@ -19,11 +19,10 @@ class MeetingView(View):
     
     def get(self, request, *args, **kwargs):
         try:
-            meeting = Meeting.objects.get(pk=self.kwargs['poll_id'])
+            meeting = Meeting.objects.get(pk=self.kwargs['meeting_id'])
             
             if meeting.user_can_vote(request.user):
-                return render(request, self.template_name, {'poll_name': meeting.name,
-                                                            'meeting': meeting.get_poll(),
+                return render(request, self.template_name, {'meeting': meeting.get_meeting(),
                                                             })
             else:
                 raise PermissionDenied
@@ -86,8 +85,7 @@ class MeetingView(View):
                         except Question.DoesNotExist:
                             raise SuspiciousOperation
                         
-                return render(request, self.template_name, {'poll_name': meeting.name,
-                                                            'meeting': meeting.get_poll(),
+                return render(request, self.template_name, {'meeting': meeting.get_poll(),
                                                             })
             else:
                 raise PermissionDenied

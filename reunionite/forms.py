@@ -19,20 +19,12 @@ class EditUserForm(Form):
     password_confirm = forms.CharField(widget=forms.PasswordInput)
     email = forms.EmailField()
 
-def MeetingForm(poll):
+def MeetingForm(meeting):
     """
-        creates a form from a poll
+        creates a form from a meeting
         useful for validation.
         
-        :param poll: a poll
-        :type poll: reunionite.models.Poll instance
+        :param meeting: a meeting
+        :type meeting: reunionite.models.Meeting instance
     """
-    fields = dict()
-    for question in Question.objects.all().filter(poll=poll):
-        qs = Choice.objects.all().filter(question=question)
-        
-        fields['q'+str(question.id)] = forms.ModelChoiceField(queryset=qs, required=question.required)
-        for textchoice in qs.filter(is_text=True):
-            fields['q'+str(question.id)+'_c'+str(textchoice.id)] = forms.CharField(max_length=32, required=True if qs.count()==1 and question.required==True else False)
-    
-    return type('PollForm', (Form, ), fields)
+    return type('PollForm', (Form, ), {'dates': forms.MultipleChoiceField(queryset=Date.objects.all().filter(meeting=meeting), required=True)})

@@ -16,7 +16,7 @@ class UserView(View):
     
     def get(self, request, *args, **kwargs):
         try:
-            user = User.objects.get(pk=request.POST.get('uid')) if request.POST.get('uid', None) != None else request.user
+            user = User.objects.get(pk=int(request.POST.get('uid'))) if request.POST.get('uid', None) != None else request.user
             meetings = Meeting.objects.all().filter(owner=user)
             edit_form = EditUserForm(initial={'email': user.email})
             return render(request, self.template_name, {'this_user': user,

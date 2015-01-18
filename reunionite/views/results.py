@@ -14,14 +14,12 @@ class MeetingResultsView(View):
     
     def get(self, request, *args, **kwargs):
         try:
-            poll = Poll.objects.get(pk=self.kwargs['poll_id'])
+            meeting = Meeting.objects.get(pk=request.GET.get('poll_id'))
             
-            if poll.owner == request.user:
-                return render(request, self.template_name, {'poll_name': poll.name,
-                                                            'results': poll.get_results(),
-                                                            })
+            if meeting.owner == request.user:
+                return render(request, self.template_name, {'results': meeting.get_results()})
             else:
                 raise PermissionDenied
             
-        except Poll.DoesNotExist:
+        except Meeting.DoesNotExist:
             raise Http404

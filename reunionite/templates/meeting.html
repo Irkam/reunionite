@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{poll_name}}{% endblock %}
+{% block title %}{{poll.poll.name}}{% endblock %}
 
 {% block content %}
 {% if poll.owner == user %}<a href="{% url 'results' poll.poll.id %}">Results</a>{% endif %}
