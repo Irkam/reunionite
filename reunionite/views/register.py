@@ -7,8 +7,8 @@ from django.shortcuts import render
 from django.views.generic import View
 from django.http import Http404
 from django.contrib.auth.models import User
-from PollPy.models import *
-from PollPy.forms import RegisterUserForm
+from reunionite.models import *
+from reunionite.forms import RegisterUserForm
 from django.core.exceptions import ValidationError
 
 class RegisterView(View):

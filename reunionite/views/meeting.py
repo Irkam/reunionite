@@ -13,7 +13,7 @@ from reunionite.forms import MeetingForm
 from django.core.exceptions import SuspiciousOperation, PermissionDenied, ValidationError
 import re
 
-class PollView(View):
+class MeetingView(View):
     template_name = "poll.html"
     regex = re.compile("^q(\d+)$")
     

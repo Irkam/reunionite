@@ -6,10 +6,10 @@ Created on 31 déc. 2014
 from django.shortcuts import render
 from django.views.generic import View
 from django.http import Http404
-from PollPy.models import *
+from reunionite.models import *
 from django.core.exceptions import PermissionDenied
 
-class PollResultsView(View):
+class MeetingResultsView(View):
     template_name = "results.html"
     
     def get(self, request, *args, **kwargs):
