@@ -1,13 +1,22 @@
 {% extends "base.html" %}
 
-{% block title %}S'enregistrer{% endblock %}
+{% block title %}Bienvenue sur la page d'enregistrement {% endblock %}
 
 {% block content %}
 	
 	<form method="post" action="{%url 'register' %}">
-		{% csrf_token %}
-		{{ register_form }}
-		<input type="submit" />
+	    {% csrf_token %}
+	    <div class="container">
+			{% for field in register_form %}
+				<div class="row row-centered">
+					<div class="col-xs-2 col-centered">{{ field.label}}</div>
+		            <div class="col-xs-4 col-centered">{{ field }}</div>
+				</div>
+			{% endfor %}
+		    <div class="row row-centered">
+		        <div class="col-xs-2 col-centered"><input type="submit" /></div>
+		    </div>
+		</div>
 	</form>
 	
 {% endblock %}
