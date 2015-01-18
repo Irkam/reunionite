@@ -5,7 +5,7 @@ Created on 17 janv. 2015
 '''
 from django.shortcuts import render
 from django.views.generic import View
-from django.core.exceptions import SuspiciousOperation
+from django.core.exceptions import SuspiciousOperation, PermissionDenied
 from django.contrib.auth.models import *
 from django.http.response import Http404
 from reunionite.models import *
@@ -17,6 +17,10 @@ class UserView(View):
     def get(self, request, *args, **kwargs):
         try:
             user = User.objects.get(pk=int(request.POST.get('uid'))) if request.POST.get('uid', None) != None else request.user
+            
+            if user.is_anonymous() and request.POST.get('uid', None) == None:
+                raise PermissionDenied
+            
             meetings = Meeting.objects.all().filter(owner=user)
             edit_form = EditUserForm(initial={'email': user.email})
             return render(request, self.template_name, {'this_user': user,

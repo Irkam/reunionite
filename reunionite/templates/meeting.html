@@ -8,7 +8,7 @@
 {% csrf_token %}
 <div class="meeting">
 	<ul>
-	{% for date in meeting.dates %}
+	{% for date in meeting_form.dates %}
 		<li>{{date}}</li>
 	{% empty %}
 		<li>i know what you did there...</li>

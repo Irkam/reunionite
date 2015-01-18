@@ -24,7 +24,9 @@ def MeetingForm(meeting):
         creates a form from a meeting
         useful for validation.
         
+        TODO: utiliser CheckboxMultipleSelect et résoudre bug lié à cette utilisation
+        
         :param meeting: a meeting
         :type meeting: reunionite.models.Meeting instance
     """
-    return type('PollForm', (Form, ), {'dates': forms.MultipleChoiceField(queryset=Date.objects.all().filter(meeting=meeting), required=True)})
+    return type('PollForm', (Form, ), {'dates': forms.ModelChoiceField(queryset=Date.objects.all().filter(meeting=meeting), empty_label=None, widget=forms.RadioSelect, required=True)})
