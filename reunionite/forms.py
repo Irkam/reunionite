@@ -19,7 +19,7 @@ class EditUserForm(Form):
     password_confirm = forms.CharField(widget=forms.PasswordInput)
     email = forms.EmailField()
 
-def PollForm(poll):
+def MeetingForm(poll):
     """
         creates a form from a poll
         useful for validation.

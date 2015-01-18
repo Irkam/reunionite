@@ -1,9 +1,9 @@
 __all__ = ["home",
-           "poll",
-           "polls",
+           "meeting",
+           "meetings",
            "results",
-           "create_poll",
-           "edit_poll",
+           "create_meeting",
+           "edit_meeting",
            "user",
            "register",
            ]

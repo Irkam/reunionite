@@ -9,7 +9,6 @@ from django.contrib import admin
 
 class DateLinkInline(admin.TabularInline):
     model = Date
-    readonly_fields = ('edit_link', )
     
 class MeetingAdmin(admin.ModelAdmin):
     fieldset = [

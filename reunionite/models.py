@@ -7,8 +7,6 @@ Created on 26 déc. 2014
 from django.db import models
 from django.db.models import Model
 from django.contrib.auth.models import Group, User
-from django.core import urlresolvers
-from django.core.exceptions import ValidationError
     
 
 class Meeting(Model):
@@ -34,18 +32,11 @@ class Meeting(Model):
 
 class Date(Model):
     meeting = models.ForeignKey(Meeting)
-    datetime = models.DateTimeField()
+    start = models.DateTimeField()
+    end = models.DateTimeField()
     
     def __str__(self):
         return self.datetime
-    
-    def edit_link(self):
-        if self.id:
-            url = urlresolvers.reverse('admin:PollPy_question_change', args=(self.id, ))
-            return '<a href="%s" target="_popup">Details</a>' % url
-        return 'You need to save before adding choices'
-    edit_link.allow_tags = True
-    edit_link.short_description = ''
     
     def get_results_detailed(self):
         return [(choice, choice.get_answer_stats()) for choice in self.get_choices()]
@@ -55,18 +46,16 @@ class Date(Model):
 
 
 class Availability(Model):
+    meeting = models.ForeignKey(Meeting)
     date = models.ForeignKey(Date)
     user = models.ForeignKey(User)
     
     class Meta:
-        order_with_respect_to = 'choice'
-        unique_together = ('question', 'choice', 'user')        
+        order_with_respect_to = 'date'
+        unique_together = ('meeting', 'date', 'user')        
     
     def __str__(self):
-        if self.choice.is_text:
-            return self.content
-        else:
-            return (str(self.question) + " "  + str(self.choice))
+        return str(self.user) + "@" + str(self.date.start) + ">>" + str(self.date.end)
 
 
 
@@ -79,7 +68,7 @@ def delete_availabilities(self, user):
             answer.delete()
 
 Meeting.get_questions = get_dates
-Meeting.delete_answers = delete_availabilities
+Meeting.delete_availabilities = delete_availabilities
 
 
 def get_availabilities(self):

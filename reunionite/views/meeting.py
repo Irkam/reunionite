@@ -8,8 +8,8 @@ from django.views.generic import View
 from django.db.utils import IntegrityError
 from django.db import transaction
 from django.http import Http404
-from PollPy.models import *
-from PollPy.forms import PollForm
+from reunionite.models import *
+from reunionite.forms import MeetingForm
 from django.core.exceptions import SuspiciousOperation, PermissionDenied, ValidationError
 import re
 
@@ -19,40 +19,40 @@ class PollView(View):
     
     def get(self, request, *args, **kwargs):
         try:
-            poll = Poll.objects.get(pk=self.kwargs['poll_id'])
+            meeting = Meeting.objects.get(pk=self.kwargs['poll_id'])
             
-            if poll.user_can_vote(request.user):
-                return render(request, self.template_name, {'poll_name': poll.name,
-                                                            'poll': poll.get_poll(),
+            if meeting.user_can_vote(request.user):
+                return render(request, self.template_name, {'poll_name': meeting.name,
+                                                            'meeting': meeting.get_poll(),
                                                             })
             else:
                 raise PermissionDenied
             
-        except Poll.DoesNotExist:
+        except Meeting.DoesNotExist:
             raise Http404
     
     
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         try:
-            poll = Poll.objects.get(pk=self.kwargs['poll_id'])
-            poll_form = PollForm(poll)(request.POST)
+            meeting = Meeting.objects.get(pk=self.kwargs['poll_id'])
+            meeting_form = MeetingForm(meeting)(request.POST)
             
-            if not poll_form.is_valid():
+            if not meeting_form.is_valid():
                 raise ValidationError("invalid form")
             
-            if not poll.user_can_vote(request.user):
+            if not meeting.user_can_vote(request.user):
                 raise PermissionDenied
             
-            poll.delete_answers(request.user)
+            meeting.delete_answers(request.user)
             
-            if poll.user_can_vote(request.user):
+            if meeting.user_can_vote(request.user):
                 for q, c in request.POST.lists():
                     regmatch = self.regex.match(q)
                     if regmatch:
                         try:
                             question = Question.objects.get(pk=regmatch.group(1))
-                            if question.poll != poll:
+                            if question.poll != meeting:
                                 raise SuspiciousOperation
                             
                             for c_id in c:
@@ -86,10 +86,10 @@ class PollView(View):
                         except Question.DoesNotExist:
                             raise SuspiciousOperation
                         
-                return render(request, self.template_name, {'poll_name': poll.name,
-                                                            'poll': poll.get_poll(),
+                return render(request, self.template_name, {'poll_name': meeting.name,
+                                                            'meeting': meeting.get_poll(),
                                                             })
             else:
                 raise PermissionDenied
-        except Poll.DoesNotExist:
+        except Meeting.DoesNotExist:
             raise Http404
