@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}{{meeting.meeting.name}}{% endblock %}
+
+{% block content %}
+
+<form method="post" action="{% url 'edit' meeting.meeting.id %}">
+{% csrf_token %}
+<div class="meeting">
+	{{ meeting_form }}
+	<input type="submit" />
+	
+	<p>Dates ({{meeting.dates|length}}) :</p>
+	<ul>
+		{% for date in meeting.dates %}
+		<li><a href="{% url 'date' meeting.meeting.id date.date.id %}">{{date.date}} ({{date.availabilities|length}} participants}</a></li>
+		{% empty %}
+		<li>Aucune date</li>
+		{% endfor %}
+	</ul>
+</div>
+</form>
+<a href="{% url 'add' meeting.meeting.id %}">Add date</a>
+{% endblock %}

@@ -13,6 +13,7 @@ from django.core.exceptions import SuspiciousOperation, PermissionDenied, Valida
 import re
 
 import pdb
+from itertools import groupby
 
 class MeetingView(View):
     template_name = "meeting.html"
@@ -24,7 +25,17 @@ class MeetingView(View):
             
             if meeting.user_can_vote(request.user):
                 meeting_form = MeetingForm(meeting)()
-                pdb.set_trace()
+                """
+                dates = meeting.get_meeting()['dates']
+                dates_ordered = []
+                for year, dates_years in groupby(dates, lambda x:x['keys'][0]):
+                    for month, dates_months in groupby(dates_years, lambda x:x['keys'][1]):
+                        for day, dates_days in groupby(dates_months, lambda x:x['keys'][2]):
+                            for hour, dates_hours in groupby(dates_days, lambda x:x['keys'][3]):
+                                pdb.set_trace()
+                                pass
+                """
+                
                 return render(request, self.template_name, {'meeting': meeting.get_meeting(),
                                                             'meeting_form': meeting_form,})
             else:
@@ -43,7 +54,7 @@ class MeetingView(View):
             if not meeting_form.is_valid():
                 raise ValidationError("invalid form")
             
-            if not meeting.user_can_vote(request.user):
+            if not meeting.user_can_vote(request.user) or request.user.is_anonymous():
                 raise PermissionDenied
             
             meeting.delete_availabilities(request.user)

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}{{date}}{% endblock %}
+
+{% block content %}
+
+<form method="post" action="{% url 'date' meeting_id date_id %}">
+{% csrf_token %}
+<div class="meeting">
+	{{ date_form }}
+	<input type="submit" />
+</div>
+</form>
+{% endblock %}

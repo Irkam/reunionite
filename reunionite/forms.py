@@ -7,6 +7,23 @@ Created on 26 déc. 2014
 from django import forms
 from django.forms import Form
 from reunionite.models import *
+
+class CreateMeetingForm(Form):
+    name = forms.CharField(max_length=64, required=True)
+    description = forms.CharField(max_length=64, required=True)
+    location = forms.CharField(max_length=64, required=True)
+    #date_closed = forms.DateTimeField()
+    max_answers = forms.IntegerField()
+
+class EditMeetingForm(Form):
+    name = forms.CharField(max_length=64, required=True)
+    description = forms.CharField(max_length=64, required=True)
+    location = forms.CharField(max_length=64, required=True)
+    #date_closed = forms.DateTimeField()
+
+class DateForm(Form):
+    start = forms.DateTimeField()
+    end = forms.DateTimeField()
     
 class RegisterUserForm(Form):
     username = forms.CharField(max_length=32, required=True)

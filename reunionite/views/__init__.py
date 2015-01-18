@@ -4,6 +4,8 @@ __all__ = ["home",
            "results",
            "create_meeting",
            "edit_meeting",
+           "date",
            "user",
            "register",
+           "add_date",
            ]

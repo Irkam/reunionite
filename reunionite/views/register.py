@@ -16,15 +16,10 @@ class RegisterView(View):
     
     def get(self, request, *args, **kwargs):
         register_form = RegisterUserForm()
-        try:
-            return render(request, self.template_name, {'register_form': register_form,})
-        except Poll.DoesNotExist:
-            raise Http404
+        return render(request, self.template_name, {'register_form': register_form,})
     
     def post(self, request, *args, **kwargs):
         """Attempts to register a new user using POST data
-        TODO
-        This needs to be secure
         """
         register_form = RegisterUserForm(data=request.POST)
         if register_form.is_valid():

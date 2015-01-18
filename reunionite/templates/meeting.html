@@ -3,7 +3,7 @@
 {% block title %}{{meeting.meeting.name}}{% endblock %}
 
 {% block content %}
-{% if meeting.owner == user %}<a href="{% url 'results' meeting.meeting.id %}">Results</a>{% endif %}
+{% if meeting.meeting.owner == user %}<a href="{% url 'edit' meeting.meeting.id %}">Results/Edit</a>{% endif %}
 <form method="post" action="{% url 'meeting' meeting.meeting.id %}">
 {% csrf_token %}
 <div class="meeting">

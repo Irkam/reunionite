@@ -13,7 +13,7 @@ class Meeting(Model):
     name = models.CharField(max_length=64, blank=False)
     description = models.TextField(blank=False)
     location = models.CharField(max_length=64, blank=False)
-    date_created = models.DateTimeField()
+    date_created = models.DateTimeField(auto_now_add=True)
     date_closed = models.DateTimeField()
     restrict_group = models.ForeignKey(Group, blank=True, null=True)
     owner = models.ForeignKey(User)
@@ -23,7 +23,7 @@ class Meeting(Model):
         return self.name
     
     def get_meeting(self):
-        return {'meeting': self, 'dates': self.get_dates()}
+        return {'meeting': self, 'dates': self.get_dates_separated()}
     
     def get_results(self):
         return {'meeting': self, 'dates': [{'date': date, 'results': date.get_results()} for date in self.get_dates()]}
@@ -36,6 +36,9 @@ class Date(Model):
     meeting = models.ForeignKey(Meeting)
     start = models.DateTimeField()
     end = models.DateTimeField()
+    
+    class Meta:
+        ordering = ['start']
     
     def __str__(self):
         return str(self.start) + ">>" + str(self.end)
@@ -62,7 +65,10 @@ class Availability(Model):
 
 
 def get_dates(self):
-    return Date.objects.all().filter(meeting=self).group_by('start.year', 'start.month', 'start.day', 'start.hour')
+    return Date.objects.all().filter(meeting=self).order_by('start')
+
+def get_dates_separated(self):
+    return [{'date': date, 'keys': date.get_separated(), 'availabilities': date.get_availabilities()} for date in Date.objects.all().filter(meeting=self).order_by('start')]
 
 def delete_availabilities(self, user):
     for d in Date.objects.all().filter(meeting=self):
@@ -70,10 +76,15 @@ def delete_availabilities(self, user):
             answer.delete()
 
 Meeting.get_dates = get_dates
+Meeting.get_dates_separated = get_dates_separated
 Meeting.delete_availabilities = delete_availabilities
 
 
 def get_availabilities(self):
-    return Availability.objects.all().filter(choice=self)
+    return Availability.objects.all().filter(date=self)
+
+def get_separated(self):
+    return (self.start.year, self.start.month, self.start.day, self.start.hour, self.start.minute)
 
 Date.get_availabilities = get_availabilities
+Date.get_separated = get_separated
