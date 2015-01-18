@@ -13,8 +13,8 @@ class DateLinkInline(admin.TabularInline):
 class MeetingAdmin(admin.ModelAdmin):
     fieldset = [
                 (None, {'fields': ['name', 'description', 'open',]}),
-                ('Date', {'fields': ['date_created', 'date_closed',]}),
-                ('Restrictions', {'fields': ['restrict_registered', 'restrict_group',]}),
+                ('Date', {'fields': ['date_created', 'date_closed', 'max_answers']}),
+                ('Restrictions', {'fields': ['restrict_group',]}),
                 ]
     inlines = [DateLinkInline]
 

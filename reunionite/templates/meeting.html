@@ -7,24 +7,13 @@
 <form method="post" action="{% url 'meeting' meeting.meeting.id %}">
 {% csrf_token %}
 <div class="meeting">
+	<ul>
 	{% for date in meeting.dates %}
-	<div class="date">
-		<p>{{forloop.counter}} : {{date.date}}</p>
-		<ul>
-		{% for choice in question.choices %}
-			<li>
-				<input type={% if question.choices|length == 1 %}"hidden"{% elif question.question.max_answers == 1 %}"radio"{%else%}"checkbox"{%endif%} name="q{{question.question.id}}" value="{{choice.id}}"/>
-				{{choice}}
-				{% if choice.is_text %}
-					<input type="text" name="q{{question.question.id}}_c{{choice.id}}" />
-				{% endif %}
-			</li>
-		{% endfor %}
-		</ul>
-	</div>
+		<li>{{date}}</li>
 	{% empty %}
-		<p>i know what you did there...</p>
+		<li>i know what you did there...</li>
 	{% endfor %}
+	</ul>
 	<input type="submit" />
 </div>
 </form>

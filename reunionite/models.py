@@ -11,11 +11,13 @@ from django.contrib.auth.models import Group, User
 
 class Meeting(Model):
     name = models.CharField(max_length=64, blank=False)
-    description = models.TextField()
+    description = models.TextField(blank=False)
+    location = models.CharField(max_length=64, blank=False)
     date_created = models.DateTimeField()
     date_closed = models.DateTimeField()
     restrict_group = models.ForeignKey(Group, blank=True, null=True)
     owner = models.ForeignKey(User)
+    max_answers = models.IntegerField()
     
     def __str__(self):
         return self.name
@@ -36,7 +38,7 @@ class Date(Model):
     end = models.DateTimeField()
     
     def __str__(self):
-        return self.datetime
+        return str(self.start) + ">>" + str(self.end)
     
     def get_results_detailed(self):
         return [(choice, choice.get_answer_stats()) for choice in self.get_choices()]
