@@ -18,8 +18,7 @@ class DeleteDateView(View):
     def get(self, request, *args, **kwargs):
         try:
             date_form = forms.DateForm(initial={})
-            return render(request, self.template_name, {'date_form': date_form,
-                                                        'meeting_id': self.kwargs['meeting_id']})
+            return 
         
         except Date.DoesNotExist:
             raise Http404
@@ -28,4 +27,6 @@ class DeleteDateView(View):
     def post(self, request, *args, **kwargs):
         date = Date()
         
-        return date.remove()
+        date_form = forms.DateForm(request.POST)
+        
+        return date.remove(request, self.template_name, {'date_form': date_form,', date_id':date.id})
