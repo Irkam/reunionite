@@ -14,7 +14,7 @@ from django.core.exceptions import SuspiciousOperation, PermissionDenied, Valida
 import re
 
 class MeetingView(View):
-    template_name = "poll.html"
+    template_name = "meeting.html"
     regex = re.compile("^q(\d+)$")
     
     def get(self, request, *args, **kwargs):
@@ -22,8 +22,7 @@ class MeetingView(View):
             meeting = Meeting.objects.get(pk=self.kwargs['meeting_id'])
             
             if meeting.user_can_vote(request.user):
-                return render(request, self.template_name, {'meeting': meeting.get_meeting(),
-                                                            })
+                return render(request, self.template_name, {'meeting': meeting.get_meeting()})
             else:
                 raise PermissionDenied
             

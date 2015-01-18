@@ -21,10 +21,10 @@ class Meeting(Model):
         return self.name
     
     def get_meeting(self):
-        return {'poll': self, 'questions': [{'question': question, 'choices': question.get_choices()} for question in self.get_questions()]}
+        return {'meeting': self, 'dates': self.get_dates()}
     
     def get_results(self):
-        return {'poll': self, 'questions': [{'question': question, 'results': question.get_results()} for question in self.get_questions()]}
+        return {'meeting': self, 'dates': [{'date': date, 'results': date.get_results()} for date in self.get_dates()]}
     
     def user_can_vote(self, user):
         return (user.groups.filter(name=self.restrict_group.name).exists() if self.restrict_group != None else True) or user.is_staff

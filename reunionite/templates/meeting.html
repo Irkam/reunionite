@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
-{% block title %}{{poll.poll.name}}{% endblock %}
+{% block title %}{{meeting.meeting.name}}{% endblock %}
 
 {% block content %}
-{% if poll.owner == user %}<a href="{% url 'results' poll.poll.id %}">Results</a>{% endif %}
-<form method="post" action="{% url 'poll' poll.poll.id %}">
+{% if meeting.owner == user %}<a href="{% url 'results' meeting.meeting.id %}">Results</a>{% endif %}
+<form method="post" action="{% url 'meeting' meeting.meeting.id %}">
 {% csrf_token %}
-<div class="poll">
-	{% for question in poll.questions %}
-	<div class="question">
-		<p>{{forloop.counter}} : {{question.question}}</p>
+<div class="meeting">
+	{% for date in meeting.dates %}
+	<div class="date">
+		<p>{{forloop.counter}} : {{date.date}}</p>
 		<ul>
 		{% for choice in question.choices %}
 			<li>
