@@ -1,2 +1,2 @@
-Django==1.7c2
+Django==2.2.28
 django-bootstrap3==5.0.3
